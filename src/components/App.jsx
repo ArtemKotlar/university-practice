@@ -17,7 +17,7 @@ export const App = () => {
         <Paper>
           <samp>{ universityData.description}</samp>
         </Paper>
-        <TutorsList tytors={universityData.tytors } />
+        <TutorsList tutors={universityData.tutors } />
           </Main>
       </div>
   );
