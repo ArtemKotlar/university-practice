@@ -1,4 +1,4 @@
-import { SideBar, Main, Paper, UniversityCard, TutorsList } from "../components";
+import { SideBar, Main, Paper, UniversityCard, TutorsList, TutorForm } from "../components";
 import universityData from '../constants/universityData.json'
 
 export const App = () => {
@@ -17,7 +17,8 @@ export const App = () => {
         <Paper>
           <samp>{ universityData.description}</samp>
         </Paper>
-        <TutorsList tutors={universityData.tutors } />
+        <TutorsList tutors={universityData.tutors} />
+        <TutorForm/>
           </Main>
       </div>
   );
