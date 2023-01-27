@@ -8,3 +8,4 @@ export { default as Paper } from './Paper/Paper';
 export { default as UniversityCard } from './UniversityCard/UniversityCard';
 export { default as TutorsList } from './Tutors/TutorsList';
 export { default as TutorForm } from './Forms/TutorForm';
+export { default as Section } from './Section/Section';
