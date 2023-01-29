@@ -1,6 +1,7 @@
-import { Form, Formik, Field, ErrorMessage } from 'formik';
+import { Form, Formik } from 'formik';
 import { FieldStyled, ErrMessage } from './TutorForm.styled';
-import { object, string, number, date, InferType } from 'yup';
+import { object, string } from 'yup';
+import { Button } from 'components';
 
 const fieldsData = [
   { name: 'lastName', label: 'Прізвище' },
@@ -20,7 +21,7 @@ const validationShemaForm = object().shape({
   city: string().required(),
 });
 
-const TutorForm = () => {
+const TutorForm = ({ addTutor }) => {
   const initialValues = {
     firstName: '',
     lastName: '',
@@ -31,6 +32,7 @@ const TutorForm = () => {
   };
   const handleSubmitForm = (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
+    addTutor(values);
     resetForm();
     setSubmitting(false);
   };
@@ -70,7 +72,7 @@ const TutorForm = () => {
             );
           })}
 
-          <button type="submit">Submit</button>
+          <Button text="Пригласить" type="submit" />
         </Form>
       )}
     </Formik>

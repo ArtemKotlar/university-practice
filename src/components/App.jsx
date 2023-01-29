@@ -32,7 +32,11 @@ class App extends Component {
   hendleToggleMenu = () => console.log('click');
 
   addTutor = tutor => {
-    this.setState();
+    this.setState(({ tutors }) => {
+      return {
+        tutors: [...tutors, tutor],
+      };
+    });
   };
 
   render() {
@@ -53,7 +57,7 @@ class App extends Component {
           </Section>
           <Section imege={tutorIcon} title="Преподаватели">
             <TutorsList tutors={tutors} />
-            <TutorForm />
+            <TutorForm addTutor={this.addTutor} />
             <Button text={'Добавить преподавателя'} icon />
           </Section>
           <Section>
