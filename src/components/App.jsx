@@ -8,10 +8,12 @@ import {
   TutorForm,
   GeneraiCardList,
   Button,
+  InfoForm,
 } from '../components';
 import universityData from '../constants/universityData.json';
 import tutorIcon from '../assets/images/teachers-emoji.png';
 import { Component } from 'react';
+import FORMS from 'constants/forms';
 
 class App extends Component {
   state = {
@@ -26,6 +28,7 @@ class App extends Component {
       })) ?? [],
 
     tutors: universityData.tutors ?? [],
+    showForm: null,
   };
   onEdit = () => console.log('edit');
   onDelete = () => console.log('delete');
@@ -38,6 +41,24 @@ class App extends Component {
       };
     });
   };
+
+  deleteTutor = name => {
+    this.setState(({ tutors }) => {
+      return {
+        tutors: [...tutors].filter(({ firstName }) => firstName !== name),
+      };
+    });
+  };
+
+  handleShowForm = name => {
+    this.setState(({ prev }) => ({
+      showForm: prev.showForm === name ? null : name,
+    }));
+  };
+
+  // addCity = (name) => {
+  //   const newCity
+  // }
 
   render() {
     const { cities, departments, tutors } = this.state;
@@ -56,23 +77,43 @@ class App extends Component {
             </Paper>
           </Section>
           <Section imege={tutorIcon} title="Преподаватели">
-            <TutorsList tutors={tutors} />
-            <TutorForm addTutor={this.addTutor} />
-            <Button text={'Добавить преподавателя'} icon />
+            <TutorsList deleteTutor={this.deleteTutor} tutors={tutors} />
+            {this.state.showForm === FORMS.TUTOR_FORM && (
+              <TutorForm addTutor={this.addTutor} />
+            )}
+            <Button
+              action={() => this.handleShowForm(FORMS.TUTOR_FORM)}
+              text={'Добавить преподавателя'}
+              icon
+            />
           </Section>
           <Section>
             <GeneraiCardList
               listData={cities}
               isOpenDown={this.hendleToggleMenu}
             />
-            <Button text={'Добавить город'} icon />
+            {this.state.showForm === FORMS.CITY_FORM && (
+              <InfoForm title="Добавление города" pleceholder="Город" />
+            )}
+            <Button
+              action={() => this.handleShowForm(FORMS.CITY_FORM)}
+              text={'Добавить город'}
+              icon
+            />
           </Section>
           <Section>
             <GeneraiCardList
               listData={departments}
               isOpenDown={this.hendleToggleMenu}
             />
-            <Button text={'Добавить факультет'} icon />
+            {this.state.showForm === FORMS.DEPARTMENTS_FORM && (
+              <InfoForm title="Добавление филиала" pleceholder="Филиал" />
+            )}
+            <Button
+              action={() => this.handleShowForm(FORMS.DEPARTMENTS_FORM)}
+              text={'Добавить факультет'}
+              icon
+            />
           </Section>
         </Main>
       </div>
