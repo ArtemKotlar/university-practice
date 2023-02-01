@@ -14,7 +14,10 @@ const fieldsData = [
 
 const validationShemaForm = object().shape({
   firstName: string().required('Заповніть це поле'),
-  lastName: string().min(2, 'Ведіть мінімальну кількість символів').required(),
+  lastName: string()
+    .min(2, 'Ведіть мінімальну кількість символів')
+    .max(9, 'Ви ввели забагато символів')
+    .required(),
   patronymic: string().required(),
   phone: string().required(),
   email: string().required(),
@@ -32,6 +35,7 @@ const TutorForm = ({ addTutor }) => {
   };
   const handleSubmitForm = (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
+    console.log('🚀 ~ values', values);
     addTutor(values);
     resetForm();
     setSubmitting(false);
@@ -58,7 +62,6 @@ const TutorForm = ({ addTutor }) => {
             return (
               <div key={name}>
                 <FieldStyled
-                  key={name}
                   type="text"
                   id={name}
                   name={name}

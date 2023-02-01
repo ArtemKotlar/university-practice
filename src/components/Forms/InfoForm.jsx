@@ -1,32 +1,35 @@
-import { Form, Formik, Field } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { object, string } from 'yup';
-import { Button } from 'components';
 import { ErrMessage } from './TutorForm.styled';
+import { Button } from 'components';
 
-const InfoForm = ({ onSubmit, title, pleceholder }) => {
+const InfoForm = ({ onSubmit, title, placeholder }) => {
   const initialValues = { name: '' };
 
   const handleSubmitForm = (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
-    console.log('values', values);
+    console.log('🚀 ~ values', values);
+    onSubmit(values.name);
     resetForm();
     setSubmitting(false);
   };
 
-  const validationShemaForm = object().shape({
-    name: string().min(2, 'Ведіть мінімальну кількість символів'),
+  const validationSchemaForm = object().shape({
+    name: string().min(2, 'Введіть мінімальну кількість символів'),
   });
-
   return (
     <Formik
-      validationSchema={validationShemaForm}
+      validationSchema={validationSchemaForm}
       initialValues={initialValues}
       onSubmit={handleSubmitForm}
     >
       {({
         values,
+
         handleChange,
         handleBlur,
+        handleSubmit,
+
         /* and other goodies */
       }) => (
         <Form>
@@ -34,17 +37,17 @@ const InfoForm = ({ onSubmit, title, pleceholder }) => {
             <h3>{title}</h3>
             <Field
               type="text"
-              id={pleceholder}
+              id={placeholder}
               name="name"
-              pleceholder={pleceholder}
-              values={values.name || ''}
+              placeholder={placeholder}
+              value={values.name || ''}
               onBlur={handleBlur}
-              onChanga={handleChange}
+              onChange={handleChange}
             />
             <ErrMessage component="div" name="name" />
           </div>
 
-          <Button text="Пригласить" type="submit" />
+          <Button text="add" type="submit" />
         </Form>
       )}
     </Formik>
