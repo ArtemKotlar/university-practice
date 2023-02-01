@@ -12,3 +12,4 @@ export { default as Section } from './Section/Section';
 export { default as GeneraiCardList } from './GeneraiCard/GeneraiCardList';
 export { default as Button } from './Button/Button';
 export { default as InfoForm } from './Forms/InfoForm';
+export { default as Modal } from './Modal/Modal';

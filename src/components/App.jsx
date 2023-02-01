@@ -10,6 +10,7 @@ import {
   Button,
   TutorForm,
   InfoForm,
+  Modal,
 } from '../components';
 import universityData from '../constants/universityData.json';
 
@@ -21,18 +22,22 @@ class App extends Component {
     cities:
       universityData.cities.map(city => ({
         text: city,
+        relation: 'cities',
       })) ?? [],
 
     departments:
       universityData.department.map(({ name }) => ({
         text: name,
+        relation: 'departments',
       })) ?? [],
     tutors: universityData.tutors ?? [],
     showForm: null,
+    isModalOpen: null,
   };
   handleToggleMenu = () => {
     console.log('click');
   };
+
   onEdit = () => console.log('edit');
   onDelete = () => console.log('delete');
 
@@ -89,6 +94,16 @@ class App extends Component {
     }
   };
 
+  handleDeleteCard = (id, relation) => {
+    this.setState(prev => ({
+      [relation]: prev[relation].filter(({ text }) => text !== id),
+    }));
+  };
+
+  toggleModal = action => {
+    this.setState({ isModalOpen: action });
+  };
+
   render() {
     const { cities, departments, tutors } = this.state;
     //  console.log(this.state.showForm);
@@ -113,14 +128,21 @@ class App extends Component {
             )}
             <Button
               action={() => this.handleShowForm(FORMS.TUTOR_FORM)}
-              text={'Добавить преподавателя'}
+              text={
+                this.state.showForm === FORMS.TUTOR_FORM
+                  ? 'Закрити форму'
+                  : 'Добавить преподавателя'
+              }
               icon
             />
           </Section>
           <Section>
             <GeneraiCardList
+              showDropDown={this.showDropDown}
+              toggleDropDown={this.toggleDropDown}
+              oneDeleteCard={this.handleDeleteCard}
               listData={cities}
-              isOpenDown={this.handleToggleMenu}
+              isModalOpen={this.isModalOpen}
             />
             {this.state.showForm === FORMS.CITY_FORM && (
               <InfoForm
@@ -131,15 +153,22 @@ class App extends Component {
             )}
             <Button
               action={() => this.handleShowForm(FORMS.CITY_FORM)}
-              text={'Добавить город'}
+              text={
+                this.state.showForm === FORMS.CITY_FORM
+                  ? 'Закрити форму'
+                  : 'Добавить город'
+              }
               icon
             />
           </Section>
 
           <Section>
             <GeneraiCardList
+              showDropDown={this.showDropDown}
+              toggleDropDown={this.toggleDropDown}
+              oneDeleteCard={this.handleDeleteCard}
               listData={departments}
-              isOpenDown={this.handleToggleMenu}
+              isModalOpen={this.isModalOpen}
             />
             {this.state.showForm === FORMS.DEPARTMENTS_FORM && (
               <InfoForm
@@ -150,10 +179,15 @@ class App extends Component {
             )}
             <Button
               action={() => this.handleShowForm(FORMS.DEPARTMENTS_FORM)}
-              text={'Добавить факультет'}
+              text={
+                this.state.showForm === FORMS.DEPARTMENTS_FORM
+                  ? 'Закрити форму'
+                  : 'Добавить факультет'
+              }
               icon
             />
           </Section>
+          <Modal />
         </Main>
       </div>
     );
