@@ -35,7 +35,6 @@ const TutorForm = ({ addTutor }) => {
   };
   const handleSubmitForm = (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);
-    console.log('🚀 ~ values', values);
     addTutor(values);
     resetForm();
     setSubmitting(false);

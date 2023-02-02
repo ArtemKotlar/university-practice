@@ -3,9 +3,11 @@ import GeneraiCardItem from './GeneraiCardItem';
 const GeneraiCardList = ({
   listData,
   isOpenDown,
-  oneDeleteCard,
-  showDropDown,
-  isModalOpen,
+  onDeleteCard,
+
+  isOpenModal,
+  toggleModal,
+  onEditCart,
 }) => {
   return (
     <ul>
@@ -15,10 +17,11 @@ const GeneraiCardList = ({
           key={text}
           text={text}
           isOpenDown={isOpenDown}
-          oneDeleteCard={oneDeleteCard}
+          onDeleteCard={onDeleteCard}
           relation={relation}
-          showDropDown={showDropDown}
-          isModalOpen={isModalOpen}
+          toggleModal={toggleModal}
+          isOpenModal={isOpenModal}
+          onEditCart={onEditCart}
         />
       ))}
     </ul>

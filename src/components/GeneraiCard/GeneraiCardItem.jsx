@@ -1,5 +1,5 @@
-import { Component } from 'react';
-import { Paper, Modal, InfoForm } from 'components';
+import { useState } from 'react';
+import { Paper, Modal, InfoForm, Button } from 'components';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { ReactComponent as Edit } from '../../assets/images/edit.svg';
 import { ReactComponent as Delete } from '../../assets/images/delete.svg';
@@ -10,61 +10,82 @@ import {
   InsideBtn,
 } from './GeneraiCard.styled';
 
-class GeneraiCardItem extends Component {
-  state = { showDropDown: false };
+const GeneralCardItem = ({
+  text,
+  id,
+  onDeleteCard,
+  relation,
+  toggleModal,
+  isOpenModal,
+  onEditCart,
+}) => {
+  const [showDropDown, setShowDropDown] = useState(false);
 
-  toggleDropDown = () => {
-    this.setState(({ showDropDown }) => ({ showDropDown: !showDropDown }));
+  const toggleDropDown = () => {
+    setShowDropDown(!showDropDown);
   };
 
-  render() {
-    const { text, id, oneDeleteCard, relation, toggleModal, isModalOpen } =
-      this.props;
-    return (
-      <Paper>
-        <Item>
-          <span>{text}</span>
-          <BtnMenu onClick={this.toggleDropDown}>
-            <BsThreeDotsVertical />
-          </BtnMenu>
+  return (
+    <Paper>
+      <Item>
+        <span>{text}</span>
+        <BtnMenu onClick={toggleDropDown}>
+          <BsThreeDotsVertical />
+        </BtnMenu>
 
-          {this.state.showDropDown && (
-            <ContainerDropdown>
-              <InsideBtn type="button" onClick={() => toggleModal('edit')}>
-                <Edit />
-                Редагувати
-              </InsideBtn>
-              {isModalOpen === 'edit' && (
-                <Modal
-                  toggleModal={toggleModal}
-                  title={`Редактировать информацию  ${
-                    relation === 'cities' ? 'о Городе' : 'об факультете'
-                  }`}
-                  children={<InfoForm />}
-                />
-              )}
+        {showDropDown && (
+          <ContainerDropdown>
+            <InsideBtn type="button" onClick={() => toggleModal('edit')}>
+              <Edit />
+              Редагувати
+            </InsideBtn>
 
-              <InsideBtn
-                onClick={() => oneDeleteCard(id, relation)}
-                type="button"
-              >
-                <Delete />
-                Удалити
-              </InsideBtn>
-              {isModalOpen === 'delete' && (
-                <Modal
-                  toggleModal={toggleModal}
-                  title={`Удаление ${
-                    relation === 'cities' ? 'Город' : 'факультете'
-                  }`}
-                />
-              )}
-            </ContainerDropdown>
-          )}
-        </Item>
-      </Paper>
-    );
-  }
-}
+            {isOpenModal === 'edit' && (
+              <Modal
+                toggleModal={toggleModal}
+                title={`Редактировать информацию  ${
+                  relation === 'cities' ? 'о Городе' : 'об факультете'
+                }`}
+                children={
+                  <InfoForm
+                    onSubmit={onEditCart}
+                    relation={relation}
+                    idItem={id}
+                    title={relation === 'cities' ? 'Город' : 'Факультет'}
+                  />
+                }
+              />
+            )}
 
-export default GeneraiCardItem;
+            <InsideBtn onClick={() => toggleModal('delete')} type="button">
+              <Delete />
+              Удалити
+            </InsideBtn>
+            {isOpenModal === 'delete' && (
+              <Modal
+                toggleModal={toggleModal}
+                title={`Удаление ${
+                  relation === 'cities' ? 'Город' : 'факультете'
+                }`}
+                children={` Будут удалены все материалы и информация ${
+                  relation === 'cities' ? 'о Городе' : 'об факультете'
+                }`}
+                actions={
+                  <>
+                    <Button action={toggleModal} text={'Ні'} />
+                    <Button
+                      action={() => onDeleteCard(id, relation)}
+                      text={'Да'}
+                    />
+                  </>
+                }
+              />
+            )}
+          </ContainerDropdown>
+        )}
+      </Item>
+    </Paper>
+  );
+};
+
+export default GeneralCardItem;
