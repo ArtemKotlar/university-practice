@@ -11,10 +11,10 @@ const GeneraiCardList = ({
 }) => {
   return (
     <ul>
-      {listData.map(({ text, relation }) => (
+      {listData.map(({ text, relation, id }) => (
         <GeneraiCardItem
           id={text}
-          key={text}
+          key={id}
           text={text}
           isOpenDown={isOpenDown}
           onDeleteCard={onDeleteCard}

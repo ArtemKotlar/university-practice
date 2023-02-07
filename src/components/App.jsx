@@ -15,22 +15,21 @@ import universityData from '../constants/universityData.json';
 
 import tutorIcon from '../assets/images/teachers-emoji.png';
 import FORMS from '../constants/forms';
+import useTutors from 'hooks/useTutors';
+import useCities from 'hooks/useCities';
+import useDepartments from 'hooks/useDepartments';
+import axios from 'axios';
+
+const BASE_URL = 'https://63e0f4a959bb472a742ced69.mockapi.io';
+
+axios.defaults.baseURL = BASE_URL;
 
 const App = () => {
-  const [tutors, setTutors] = useState(universityData.tutors ?? []);
+  const [tutors, setTutors] = useTutors();
 
-  const [cities, setCities] = useState(
-    universityData.cities.map(city => ({
-      text: city,
-      relation: 'cities',
-    })) ?? []
-  );
-  const [departments, setDepartments] = useState(
-    universityData.department.map(({ name }) => ({
-      text: name,
-      relation: 'departments',
-    })) ?? []
-  );
+  const [cities, setCities] = useCities();
+
+  const [departments, setDepartments] = useDepartments();
 
   const [showForm, setShowForm] = useState(null);
 
@@ -53,27 +52,33 @@ const App = () => {
   };
 
   const addCity = name => {
-    if (cities.some(city => city.text.toLowerCase() === name.toLowerCase())) {
-      alert('This city exist');
-    } else {
-      const newCity = { text: name, relation: 'cities' };
-      setCities([...cities, newCity]);
-      setShowForm(null);
-    }
+    axios.post('/cities', { text: name }).then(({ data }) => {
+      if (cities.some(city => city.text.toLowerCase() === name.toLowerCase())) {
+        alert('This city exist');
+      } else {
+        const newCity = { ...data, relation: 'cities' };
+
+        setCities([...cities, newCity]);
+        setShowForm(null);
+      }
+    });
   };
 
   const addDepartment = name => {
-    if (
-      departments.some(
-        department => department.text.toLowerCase() === name.toLowerCase()
-      )
-    ) {
-      alert('This department exist');
-    } else {
-      const newDepartment = { text: name, relation: 'departments' };
-      setDepartments([...departments, newDepartment]);
-      setShowForm(null);
-    }
+    axios.post('/departments', { name }).then(({ data: { id, name } }) => {
+      if (
+        departments.some(
+          department => department.text.toLowerCase() === name.toLowerCase()
+        )
+      ) {
+        alert('This department exist');
+      } else {
+        const newDepartment = { text: name, id, relation: 'departments' };
+
+        setDepartments([...departments, newDepartment]);
+        setShowForm(null);
+      }
+    });
   };
 
   const handleDeleteCard = (id, relation) => {
