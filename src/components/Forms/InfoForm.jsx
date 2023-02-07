@@ -3,8 +3,15 @@ import { object, string } from 'yup';
 import { ErrMessage } from './TutorForm.styled';
 import { Button } from 'components';
 
-const InfoForm = ({ onSubmit, title, placeholder, idItem, relation }) => {
-  const initialValues = { name: idItem || '' };
+const InfoForm = ({
+  onSubmit,
+  title,
+  placeholder,
+  idItem,
+  relation,
+  textItem,
+}) => {
+  const initialValues = { name: textItem || '' };
 
   const handleSubmitForm = (values, { setSubmitting, resetForm }) => {
     setSubmitting(true);

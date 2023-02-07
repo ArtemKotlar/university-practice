@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import axios from 'axios';
 import {
   SideBar,
   Main,
@@ -11,18 +12,19 @@ import {
   TutorForm,
   InfoForm,
 } from '../components';
-import universityData from '../constants/universityData.json';
 
+import universityData from '../constants/universityData.json';
 import tutorIcon from '../assets/images/teachers-emoji.png';
 import FORMS from '../constants/forms';
 import useTutors from 'hooks/useTutors';
 import useCities from 'hooks/useCities';
 import useDepartments from 'hooks/useDepartments';
-import axios from 'axios';
-
-const BASE_URL = 'https://63e0f4a959bb472a742ced69.mockapi.io';
-
-axios.defaults.baseURL = BASE_URL;
+import {
+  deleteDepartment,
+  postDepartment,
+  updateDepartment,
+} from 'api/departments';
+import { postCity, deleteCity, updateCity } from 'api/citiesApi';
 
 const App = () => {
   const [tutors, setTutors] = useTutors();
@@ -52,7 +54,7 @@ const App = () => {
   };
 
   const addCity = name => {
-    axios.post('/cities', { text: name }).then(({ data }) => {
+    postCity({ text: name }).then(({ data }) => {
       if (cities.some(city => city.text.toLowerCase() === name.toLowerCase())) {
         alert('This city exist');
       } else {
@@ -65,7 +67,7 @@ const App = () => {
   };
 
   const addDepartment = name => {
-    axios.post('/departments', { name }).then(({ data: { id, name } }) => {
+    postDepartment({ name }).then(({ data: { id, name } }) => {
       if (
         departments.some(
           department => department.text.toLowerCase() === name.toLowerCase()
@@ -83,11 +85,18 @@ const App = () => {
 
   const handleDeleteCard = (id, relation) => {
     if (relation === 'cities') {
-      const newCityArr = cities.filter(({ text }) => text !== id);
-      setCities(newCityArr);
+      deleteCity(id).then(res => {
+        const resId = res.data.id;
+
+        const newCityArr = cities.filter(({ id }) => resId !== id);
+        setCities(newCityArr);
+      });
     } else {
-      const newDepartmentsArr = departments.filter(({ text }) => text !== id);
-      setDepartments(newDepartmentsArr);
+      deleteDepartment(id).then(res => {
+        const resId = res.data.id;
+        const newDepartmentsArr = departments.filter(({ id }) => resId !== id);
+        setDepartments(newDepartmentsArr);
+      });
     }
   };
 

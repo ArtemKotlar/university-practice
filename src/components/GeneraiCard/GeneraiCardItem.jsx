@@ -48,6 +48,7 @@ const GeneralCardItem = ({
                 }`}
                 children={
                   <InfoForm
+                    textItem={text}
                     onSubmit={onEditCart}
                     relation={relation}
                     idItem={id}
