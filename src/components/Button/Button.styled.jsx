@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const ButtonStyled = styled.button`
-      justify-content: center;
+  justify-content: center;
   align-items: center;
   padding: 8px 16px;
   gap: 10px;
