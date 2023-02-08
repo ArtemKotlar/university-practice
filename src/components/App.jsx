@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import axios from 'axios';
 import {
   SideBar,
   Main,
@@ -107,21 +106,27 @@ const App = () => {
   const handleEditCard = data => {
     const { id, name, relation } = data;
     if (relation === 'cities') {
-      const findIndexCity = cities.findIndex(item => item.text === id);
-      setCities(prev => [
-        ...prev.slice(0, findIndexCity),
-        { text: name, relation },
-        ...prev.slice(findIndexCity + 1),
-      ]);
+      updateCity(id, { id, text: name }).then(res => {
+        const resId = res.data.id;
+        const findIndexCity = cities.findIndex(item => item.id === resId);
+        setCities(prev => [
+          ...prev.slice(0, findIndexCity),
+          { id: resId, text: res.data.text, relation },
+          ...prev.slice(findIndexCity + 1),
+        ]);
+      });
     } else {
-      const findIndexDepartments = departments.findIndex(
-        item => item.text === id
-      );
-      setDepartments(prev => [
-        ...prev.slice(0, findIndexDepartments),
-        { text: name, relation },
-        ...prev.slice(findIndexDepartments + 1),
-      ]);
+      updateDepartment(id, { id, name }).then(res => {
+        const resId = res.data.id;
+        const findIndexDepartments = departments.findIndex(
+          item => item.id === resId
+        );
+        setDepartments(prev => [
+          ...prev.slice(0, findIndexDepartments),
+          { id: resId, text: res.data.name, relation },
+          ...prev.slice(findIndexDepartments + 1),
+        ]);
+      });
     }
   };
 
