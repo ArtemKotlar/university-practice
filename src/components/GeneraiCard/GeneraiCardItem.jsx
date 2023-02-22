@@ -9,6 +9,7 @@ import {
   ContainerDropdown,
   InsideBtn,
 } from './GeneraiCard.styled';
+import { useNavigate } from 'react-router-dom';
 
 const GeneralCardItem = ({
   text,
@@ -20,13 +21,19 @@ const GeneralCardItem = ({
   onEditCart,
 }) => {
   const [showDropDown, setShowDropDown] = useState(false);
+  const navigate = useNavigate();
+  const pathTo = () => {
+    if (relation !== 'departments') return;
+    navigate(`/departments/${id}`);
+  };
 
-  const toggleDropDown = () => {
+  const toggleDropDown = event => {
+    event.stopPropagation();
     setShowDropDown(!showDropDown);
   };
 
   return (
-    <Paper>
+    <Paper onClick={pathTo}>
       <Item>
         <span>{text}</span>
         <BtnMenu onClick={toggleDropDown}>
@@ -48,6 +55,7 @@ const GeneralCardItem = ({
                 }`}
                 children={
                   <InfoForm
+                    toggleModal={toggleModal}
                     textItem={text}
                     onSubmit={onEditCart}
                     relation={relation}
